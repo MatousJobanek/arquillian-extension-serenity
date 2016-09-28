@@ -102,9 +102,6 @@ public class LifecycleManager {
         } else if (runner.getNotifier().getListOfIgnoredTests().size() > 0) {
             testResult.setStatus(TestResult.Status.SKIPPED);
             runner.getNotifier().getListOfIgnoredTests().clear();
-//            if (testResult.getThrowable() instanceof AssumptionViolatedException) {
-//                testResult.setThrowable(null);
-//            }
         }
     }
 

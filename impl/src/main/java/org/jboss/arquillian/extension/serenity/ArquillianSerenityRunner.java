@@ -1,12 +1,9 @@
 package org.jboss.arquillian.extension.serenity;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
 import net.serenitybdd.junit.runners.SerenityRunner;
-import net.serenitybdd.junit.runners.TestMethodConfiguration;
-import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.junit.listeners.JUnitStepListener;
 import org.junit.runner.Description;
 import org.junit.runners.model.FrameworkMethod;
@@ -53,61 +50,11 @@ public class ArquillianSerenityRunner extends SerenityRunner {
     }
 
     public Description describeSerenityChild(FrameworkMethod method) {
-        return this.describeChild(method);
+        return describeChild(method);
     }
 
     public void addTestReadyToStart(FrameworkMethod method){
         readyToStart.add(describeChild(method));
     }
 
-    public boolean shouldBeIgnored(FrameworkMethod method) {
-        TestMethodConfiguration theMethod = TestMethodConfiguration.forMethod(method);
-        Description description = describeChild(method);
-        if (!readyToStart.contains(description)){
-            return false;
-        }
-
-        if (notifier.getListOfIgnoredTests().contains(description)){
-            return true;
-        }
-
-        if (theMethod.isManual()) {
-            markAsManual(method);
-            notifier.fireTestIgnored(description);
-            clearMetadataIfRequired();
-            return true;
-        } else if (theMethod.isPending()) {
-            markAsPending(method);
-            notifier.fireTestIgnored(description);
-            clearMetadataIfRequired();
-            return true;
-        }
-        return false;
-    }
-
-    private void clearMetadataIfRequired(){
-        try {
-            Method clearMetadataIfRequired = SerenityRunner.class.getDeclaredMethod("clearMetadataIfRequired");
-            clearMetadataIfRequired.setAccessible(true);
-            clearMetadataIfRequired.invoke(this);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void markAsManual(FrameworkMethod method) {
-        testStarted(method);
-        StepEventBus.getEventBus().testIsManual();
-        StepEventBus.getEventBus().testFinished();
-    }
-
-    private void testStarted(FrameworkMethod method) {
-        getStepListener().testStarted(Description.createTestDescription(method.getMethod().getDeclaringClass(), testName(method)));
-    }
-
-    private void markAsPending(FrameworkMethod method) {
-        testStarted(method);
-        StepEventBus.getEventBus().testPending();
-        StepEventBus.getEventBus().testFinished();
-    }
 }
