@@ -43,7 +43,7 @@ public class LifecycleManager {
 
     private static Logger log = Logger.getLogger(LifecycleManager.class.getName());
 
-    public void observeBeforeClass(@Observes BeforeClass beforeClass) throws InitializationError {
+    public void prepareArquillianSerenityRunner(@Observes BeforeClass beforeClass) throws InitializationError {
         if (arquillianSerenity.get() == null) {
             ArquillianSerenityRunner arqSerenityRunner =
                 new ArquillianSerenityRunner(beforeClass.getTestClass().getJavaClass());
@@ -53,7 +53,7 @@ public class LifecycleManager {
 
     }
 
-    public void observeTest(@Observes(precedence = 99) EventContext<Test> context)
+    public void invokeTest(@Observes(precedence = 99) EventContext<Test> context)
         throws NoSuchFieldException, IllegalAccessException {
 
         final Test event = context.getEvent();
@@ -85,7 +85,7 @@ public class LifecycleManager {
         context.proceed();
     }
 
-    public void observeTestResult(@Observes TestResult testResult) {
+    public void setTestResult(@Observes TestResult testResult) {
         ArquillianSerenityRunner runner = arquillianSerenity.get();
         BaseStepListener publisher = runner.getSerenityStepListener().getBaseStepListener();
 
@@ -105,7 +105,7 @@ public class LifecycleManager {
         }
     }
 
-    public void observeAfterSuite(@Observes AfterSuite afterSuite) {
+    public void cleanupAndReportGeneration(@Observes AfterSuite afterSuite) {
         try {
             StepEventBus.getEventBus().testSuiteFinished();
         } catch (Throwable listenerException) {
