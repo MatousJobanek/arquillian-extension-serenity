@@ -1,5 +1,6 @@
 package org.jboss.arquillian.extension.serenity;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +16,7 @@ public class ArquillianSerenityNotifier extends RunNotifier {
     private JUnitStepListener jUnitStepListener;
 
     private List<Description> listOfIgnoredTests = new ArrayList<Description>();
+    private List<Method> listOfInContainerTests = new ArrayList<Method>();
 
     public ArquillianSerenityNotifier(JUnitStepListener jUnitStepListener){
         this.jUnitStepListener = jUnitStepListener;
@@ -32,6 +34,10 @@ public class ArquillianSerenityNotifier extends RunNotifier {
 
     public List<Description> getListOfIgnoredTests(){
         return listOfIgnoredTests;
+    }
+
+    public List<Method> getListOfInContainerTests(){
+        return listOfInContainerTests;
     }
 
 }

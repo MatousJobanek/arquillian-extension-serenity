@@ -3,21 +3,25 @@ package net.serenity.bdd.arquillian.features.search;
 import net.serenity.bdd.arquillian.steps.serenity.EndUserSteps;
 import net.thucydides.core.annotations.Issue;
 import net.thucydides.core.annotations.Managed;
+import net.thucydides.core.annotations.Manual;
 import net.thucydides.core.annotations.Pending;
 import net.thucydides.core.annotations.Steps;
 import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
 
 @RunWith(Arquillian.class)
-public class SearchByKeywordStory {
+public class SearchByKeywordStoryJunitTest {
 
-    @Deployment(testable=false)
+    @Deployment
     public static WebArchive createTestArchive() {
         WebArchive archive = ShrinkWrap
             .create(WebArchive.class)
@@ -33,6 +37,8 @@ public class SearchByKeywordStory {
 
     @Issue("#WIKI-1")
     @Test
+    @RunAsClient
+    @Manual
     public void searching_by_keyword_apple_should_display_the_corresponding_article() {
         anna.is_the_home_page();
         anna.looks_for("apple");
@@ -41,6 +47,8 @@ public class SearchByKeywordStory {
     }
 
     @Test
+    @RunAsClient
+    @Ignore
     public void searching_by_keyword_banana_should_display_the_corresponding_article() {
         anna.is_the_home_page();
         anna.looks_for("pear");
@@ -48,6 +56,16 @@ public class SearchByKeywordStory {
     }
 
     @Pending @Test
+    @RunAsClient
     public void searching_by_ambiguious_keyword_should_display_the_disambiguation_page() {
+    }
+
+
+
+    @Test
+    @Pending
+    public void runInContainerTest(){
+        System.err.println("hi there");
+        Assert.fail();
     }
 } 

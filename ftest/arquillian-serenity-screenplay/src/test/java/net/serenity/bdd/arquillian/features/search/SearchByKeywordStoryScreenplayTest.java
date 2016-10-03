@@ -6,7 +6,6 @@ import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.questions.page.TheWebPage;
 import net.thucydides.core.annotations.Managed;
-import net.thucydides.core.annotations.Pending;
 import net.thucydides.core.annotations.Steps;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
@@ -27,7 +26,8 @@ import static net.serenitybdd.screenplay.GivenWhenThen.when;
 import static org.hamcrest.Matchers.containsString;
 
 @RunWith(Arquillian.class)
-public class SearchByKeywordStoryTest {
+@RunAsClient
+public class SearchByKeywordStoryScreenplayTest {
 
     @Deployment
     public static WebArchive createTestArchive() {
@@ -51,8 +51,6 @@ public class SearchByKeywordStoryTest {
     }
 
     @Test
-    @RunAsClient
-    @Pending
     public void search_results_should_show_the_search_term_in_the_title() {
 
         givenThat(anna).wasAbleTo(openTheApplication);
@@ -61,9 +59,4 @@ public class SearchByKeywordStoryTest {
 
         then(anna).should(eventually(seeThat(TheWebPage.title(), containsString("BDD In Action"))));
     }
-
-//    @Test
-//    public void runInContainerTest(){
-//        System.err.println("hi there");
-//    }
 }
